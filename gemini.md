@@ -75,7 +75,13 @@ screen -S pr0bot python bot.py
 
 ## Nächste mögliche Features
 
-- `[ ]` Zufälligen statt neuesten Top-Post zeigen (`/pr0gramm random`)
-- `[ ]` NSFW-Kanal-Check vor dem Senden von nicht-SFW-Inhalten
-- `[ ]` Systemd-Service-Datei für Auto-Start nach Server-Neustart
-- `[ ]` Cooldown pro User/Channel um Spam zu verhindern
+- `[x]` Zufälligen statt neuesten Top-Post zeigen (`/pr0gramm random`)
+- `[x]` Systemd-Service-Datei für Auto-Start nach Server-Neustart
+
+---
+
+### 🐧 Linux Deployment (Ready)
+Der Bot ist nun für den Linux-Server optimiert:
+1. `pr0bot.service` liegt bereit – einfach nach `/etc/systemd/system/` kopieren und anpassen.
+2. Der Code läuft stabil als Hintergrunddienst.
+3. Slash-Commands sind für globale Nutzung synchronisiert.

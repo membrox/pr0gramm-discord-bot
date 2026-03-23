@@ -1,5 +1,6 @@
 import os
 import aiohttp
+import random
 import discord
 from discord import app_commands
 from dotenv import load_dotenv
@@ -38,9 +39,11 @@ class Pr0Bot(discord.Client):
 client = Pr0Bot()
 
 
-@client.tree.command(name="pr0gramm", description="Postet das neueste Top-Bild von pr0gramm.com")
-async def pr0gramm(interaction: discord.Interaction):
-    """Fetch and post the latest top item from pr0gramm.com"""
+@client.tree.command(name="pr0gramm", description="Postet ein Top-Bild von pr0gramm.com")
+@app_commands.describe(is_random="Wählt einen zufälligen Post aus der Top-Liste (statt dem neuesten)")
+@app_commands.rename(is_random="random")
+async def pr0gramm(interaction: discord.Interaction, is_random: bool = False):
+    """Fetch and post a top item from pr0gramm.com"""
     await interaction.response.defer()
 
     try:
@@ -65,15 +68,15 @@ async def pr0gramm(interaction: discord.Interaction):
         await interaction.followup.send("❌ Keine Einträge von pr0gramm gefunden.")
         return
 
-    # Skip pinned items (mark=14 is the pr0gramm pinned marker, or promoted is very large)
-    item = None
-    for candidate in items:
-        if not candidate.get("pinned", False):
-            item = candidate
-            break
+    # Filter out pinned items
+    candidates = [i for i in items if not i.get("pinned", False)]
+    if not candidates:
+        candidates = items  # fallback if all are pinned
 
-    if item is None:
-        item = items[0]  # fallback: just take the first
+    if is_random:
+        item = random.choice(candidates)
+    else:
+        item = candidates[0]
 
     image_path = item["image"]
     item_id = item["id"]
